@@ -4,7 +4,7 @@ let playLists;
 let currFolder = "Combined";
 
 async function getPlayLists() {
-    let data = await fetch("/songs/");
+    let data = await fetch("http://127.0.0.1:3000/songs/");
     let response = await data.text();
     const div = document.createElement("div");
     div.innerHTML = response;
@@ -17,7 +17,7 @@ async function getPlayLists() {
         if (element.href.includes("/songs")) {
             let folder = element.innerHTML.slice(0, -1);
             playLists.push(folder);
-            let data = await fetch(`/songs/${folder}/info.json`);
+            let data = await fetch(`http://127.0.0.1:3000/songs/${folder}/info.json`);
             let response = await data.json();
 
             cardContainer.innerHTML = cardContainer.innerHTML +
@@ -43,7 +43,7 @@ async function getPlayLists() {
 }
 
 async function getSongs(folder) {
-    let a = await fetch(`/${folder}`)
+    let a = await fetch(`http://127.0.0.1:3000/${folder}`)
     let response = await a.text();
     const div = document.createElement("div");
     div.innerHTML = response;
