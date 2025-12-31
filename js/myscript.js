@@ -4,7 +4,7 @@ let playLists;
 let currFolder = "Combined";
 
 async function getPlayLists() {
-    let data = await fetch("https://yourspotify.vercel.app/%5Csongs%5C");
+    let data = await fetch("https://yourspotify.vercel.app/songs");
     let response = await data.text();
     const div = document.createElement("div");
     div.innerHTML = response;
@@ -14,10 +14,10 @@ async function getPlayLists() {
 
     for (let index = 0; index < as.length; index++) {
         const element = as[index];
-        if (element.href.includes("%5Csongs")) {
+        if (element.href.includes("songs")) {
             let folder = element.innerHTML.slice(0, -1);
             playLists.push(folder);
-            let data = await fetch(`https://yourspotify.vercel.app/%5Csongs%5C${folder}%5Cinfo.json`);
+            let data = await fetch(`https://yourspotify.vercel.app/songs/${folder}/info.json`);
             let response = await data.json();
 
             cardContainer.innerHTML = cardContainer.innerHTML +
@@ -37,7 +37,7 @@ async function getPlayLists() {
     Array.from(document.querySelectorAll(".card-container .card")).forEach((card) => {
         card.addEventListener("click", async (event) => {
             currFolder = card.dataset.folder;
-            await getSongs(`songs%5C${currFolder}%5C`);
+            await getSongs(`songs${currFolder}`);
         })
     })
 }
@@ -52,7 +52,7 @@ async function getSongs(folder) {
     for (let index = 0; index < as.length; index++) {
         const element = as[index];
         if (element.href.endsWith(".mp3")) {
-            songs.push(element.href.split(`%5C${folder}`)[1].slice(0, -4).replaceAll("%20", " "));
+            songs.push(element.href.split(`${folder}`)[1].slice(0, -4).replaceAll("%20", " "));
         }
     }
 
@@ -67,7 +67,7 @@ async function getSongs(folder) {
         <img class="music invert" src="img/music.svg" alt="music">
         <div class="song-info">
         <div title="${song}">${song}</div>
-        <div>${folder.split("%5C")[1]}</div>
+        <div>${folder.split("")[1]}</div>
         </div>
         <div>
         <span>Play now</span>
@@ -116,7 +116,7 @@ const playMusic = (track, pause = false) => {
 async function main() {
     await getPlayLists();
 
-    await getSongs(`songs%5C${currFolder}%5C`);
+    await getSongs(`songs${currFolder}`);
     playMusic(songs[0], true);
 
 
