@@ -4,7 +4,7 @@ let playLists;
 let currFolder = "Combined";
 
 async function getPlayLists() {
-    let data = await fetch("//songs/");
+    let data = await fetch("/songs/");
     let response = await data.text();
     const div = document.createElement("div");
     div.innerHTML = response;
