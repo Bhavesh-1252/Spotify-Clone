@@ -2,72 +2,62 @@ let currentSong = new Audio();
 let songs;
 let playLists;
 let currFolder = "Combined";
+let songsConfig; // Store the config data
+
+async function loadConfig() {
+    let data = await fetch("/songs-config.json");
+    songsConfig = await data.json();
+}
 
 async function getPlayLists() {
-    let data = await fetch("/songs/");
-    let response = await data.text();
-    const div = document.createElement("div");
-    div.innerHTML = response;
-    let as = div.getElementsByTagName("a");
-    playLists = [];
+    playLists = songsConfig.playlists.map(p => p.folder);
     const cardContainer = document.querySelector(".card-container");
+    cardContainer.innerHTML = ""; // Clear existing content
 
-    for (let index = 0; index < as.length; index++) {
-        const element = as[index];
-        if (element.href.includes("/songs")) {
-            let folder = element.innerHTML.slice(0, -1);
-            playLists.push(folder);
-            let data = await fetch(`/songs/${folder}/info.json`);
-            let response = await data.json();
-
-            cardContainer.innerHTML = cardContainer.innerHTML +
-                `<div data-folder="${folder}" class="card">
+    for (const playlist of songsConfig.playlists) {
+        cardContainer.innerHTML = cardContainer.innerHTML +
+            `<div data-folder="${playlist.folder}" class="card">
             <div class="song-container">
-            <img src="songs/${folder}/cover.jpg" alt="song">
+            <img src="songs/${playlist.folder}/cover.jpg" alt="song">
             <div class="play">
             <img src="img/play.svg" alt="play button">
             </div>
             </div>
-            <h3>${response.title}</h3>
-            <p>${response.description}</p>
+            <h3>${playlist.title}</h3>
+            <p>${playlist.description}</p>
             </div>`;
-        }
     }
 
     Array.from(document.querySelectorAll(".card-container .card")).forEach((card) => {
         card.addEventListener("click", async (event) => {
             currFolder = card.dataset.folder;
-            await getSongs(`songs/${currFolder}/`);
+            await getSongs(currFolder);
         })
     })
 }
 
 async function getSongs(folder) {
-    let a = await fetch(`/${folder}`)
-    let response = await a.text();
-    const div = document.createElement("div");
-    div.innerHTML = response;
-    let as = div.getElementsByTagName("a");
-    songs = [];
-    for (let index = 0; index < as.length; index++) {
-        const element = as[index];
-        if (element.href.endsWith(".mp3")) {
-            songs.push(element.href.split(`/${folder}`)[1].slice(0, -4).replaceAll("%20", " "));
-        }
+    // Find the playlist in config
+    const playlist = songsConfig.playlists.find(p => p.folder === folder);
+
+    if (!playlist) {
+        console.error("Playlist not found:", folder);
+        return;
     }
+
+    songs = playlist.songs;
 
     const songUl = document.querySelector(".song-list").getElementsByTagName("ul")[0];
     songUl.innerHTML = "";
 
     for (const song of songs) {
-
         songUl.innerHTML = songUl.innerHTML +
             `<li>
         <div class="music-card">
         <img class="music invert" src="img/music.svg" alt="music">
         <div class="song-info">
         <div title="${song}">${song}</div>
-        <div>${folder.split("/")[1]}</div>
+        <div>${folder}</div>
         </div>
         <div>
         <span>Play now</span>
@@ -85,7 +75,6 @@ async function getSongs(folder) {
             playMusic(el.querySelector(".song-info div").title);
         })
     })
-
 }
 
 function formatTime(seconds) {
@@ -102,7 +91,6 @@ function formatTime(seconds) {
     return `${formattedMins}:${formattedSecs}`;
 }
 
-
 const playMusic = (track, pause = false) => {
     currentSong.src = `songs/${currFolder}/` + track + ".mp3";
     if (!pause) {
@@ -114,11 +102,12 @@ const playMusic = (track, pause = false) => {
 }
 
 async function main() {
+    // Load config first!
+    await loadConfig();
+
     await getPlayLists();
-
-    await getSongs(`songs/${currFolder}/`);
+    await getSongs(currFolder);
     playMusic(songs[0], true);
-
 
     play.addEventListener("click", () => {
         if (currentSong.paused) {
@@ -210,7 +199,6 @@ async function main() {
             document.querySelector(".volume input").value = 100;
         }
     })
-
 }
 
 main();

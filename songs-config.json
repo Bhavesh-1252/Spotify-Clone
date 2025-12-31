@@ -1,0 +1,70 @@
+{
+    "playlists": [
+        {
+            "folder": "Combined",
+            "title": "Top Songs Album",
+            "description": "Top songs for you!",
+            "songs": [
+                "295",
+                "Kahani Suno",
+                "Saiyyan",
+                "Sapphire"
+            ]
+        },
+        {
+            "folder": "Arjit-Singh",
+            "title": "Arjit's Album",
+            "description": "Arjit Singh, New Album",
+            "songs": [
+                "Channa Mereya",
+                "Jhoome Jo Pathaan",
+                "O Bedardeya",
+                "O Desh Mere",
+                "Satranga",
+                "Tera Yaar Hoon Main",
+                "Ve Kamleya"
+            ]
+        },
+        {
+            "folder": "Karan-Aujla",
+            "title": "Karan Aujla",
+            "description": "Karan here, Let's roll",
+            "songs": [
+                "52 Bars",
+                "Antidote",
+                "Courtside",
+                "Softly",
+                "Satranga",
+                "Tauba Tauba",
+                "Wavy"
+            ]
+        },
+        {
+            "folder": "Love-Sad",
+            "title": "Sad ⨯ Love",
+            "description": "Have some love & sad",
+            "songs": [
+                "Afusic - Pal Pal",
+                "Anuv Jain - AFSOS",
+                "HUSN",
+                "Jhol",
+                "Jo Tum Mere Ho",
+                "Saiyaara"
+            ]
+        },
+        {
+            "folder": "Religious",
+            "title": "Religious Album",
+            "description": "Religious songs for you!",
+            "songs": [
+                "Aasman Ko Chukar Dekha",
+                "Balaji Accha Lage Se",
+                "Krishnaya Vasudevaya",
+                "Namo Namo",
+                "Ram Ayenge",
+                "Shiv Kailasho Ke Vasi",
+                "Shri Krishna Govind Hare Murari"
+            ]
+        }
+    ]
+}
